@@ -14,7 +14,7 @@ fn main(){
         println!("----------------------------------------------------");
         println!("----------------------------------------------------");
         
-        println!("this is flutter test code generator program written by manoj and chandra.");
+        println!("this is flutter test code generator program written by manoj , chandra and aishwarya.");
         println!("please press options which will generate code on the basis");
         println!("----------------------------------------------------");
         println!("1. by type");
@@ -53,7 +53,10 @@ fn check_options(input: i8){
         println!("5. ListView");
         println!("6. SingleChildScrollView");
         println!("7. DropdownForm");
-        println!("8. Default (for managing custom codes)");
+        // update to wiget new one 
+        println!("8: DropDownMenuItem");
+        println!("9: Delayed time ");
+        println!("10. Default (for managing custom codes)");
 
         let mut  ops = String::new();
         io::stdin().read_line(&mut ops).expect("failed to read your options");
@@ -61,7 +64,7 @@ fn check_options(input: i8){
         match ops.trim().parse::<i8>() {
            Ok(num)=>{
 
-            if num < 8 {
+            if num < 11 {
                 send_code_by_type(num);
             }else{
                 println!("this must be less then 8");
@@ -166,9 +169,44 @@ fn send_code_by_type(index :i8){
         5 => vat = "ListView",
         6 => vat = "SingleChildScrollView",
         7 => vat = "DropdownForm",
+        8 => vat = "DropDownMenuItem",
+        9 => vat = "Delayed time",
         _ => vat = "<options>"
     }
-    
+
+
+    if vat ==  "Delayed time"{
+      let   sender = format!("await Future.delayed(const Duration(seconds: 2));");
+        write_code_to_file(&sender);
+        write_code_to_file("");
+        write_code_to_file("");
+
+        println!("await Future.delayed(const Duration(seconds: 2));");
+        
+    }else{
+
+     
+
+    let mut at_index = String::new();
+
+    loop{
+        at_index.clear();
+
+        println!("please enter index of  of your widget.");
+        io::stdin().read_line(&mut at_index).expect("failed to read your options");
+        match  at_index.trim().parse::<u8>() {
+            Ok(num)=>{
+                println!("you've selected index {}",num);
+                break;
+            }
+            Err(e)=>{
+                println!("sorry while parsing your index we got an error {}",e);
+            
+            }
+        }
+    }
+    // Trim newline characters
+
     println!("you have selected {}",vat);
     println!("//----------------------------------------------------");
     println!("//----------------------------------------------------");
@@ -186,14 +224,14 @@ fn send_code_by_type(index :i8){
 
     
     if vat == "TextFormField" || vat == "TextField" {
-        sender = format!("await tester.enterText(find.byType({}).at(0), 'value');",vat);
+        sender = format!("await tester.enterText(find.byType({}).at({}), 'value');",vat,at_index.trim());
     write_code_to_file(&sender);
-    println!("await tester.enterText(find.byType({}).at(0), 'value');",vat);
+    println!("await tester.enterText(find.byType({}).at({}), 'value');",vat,at_index.trim());
 
     }else{
-        sender = format!("await tester.tap(find.byType({}).at(0));",vat);
+        sender = format!("await tester.tap(find.byType({}).at({}));",vat,at_index.trim());
         write_code_to_file(&sender);
-        println!("await tester.tap(find.byType({}).at(0));",vat);
+        println!("await tester.tap(find.byType({}).at({}));",vat,at_index.trim());
         
     }
 
@@ -208,6 +246,9 @@ fn send_code_by_type(index :i8){
     write_code_to_file(&sender);
     println!("await tester.pumpAndSettle();");
 
+
+    }
+   
 }
 
 fn send_code_by_icon(icon_input: &str){
